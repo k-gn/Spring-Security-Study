@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
         
-        // 소셜 로그인 후 후처리가 필요함. (Tip. oauth2-client 사용 시 코드 X, 액세스 토큰 + 사용자 정보를 한번에 받는다.)
+        // 소셜 로그인 후 후처리가 필요함. (Tip. oauth2-client 사용 시 코드 X, 액세스 토큰 + 사용자 정보를 한번에 받아 편리함)
         // 1. 코드받기(인증), 2. 액세스 토큰(해당 사용자 정보에 접근 권한),
         // 3. 사용자 프로필정보를 가져옴, 4. 그 정보를 토대로 회원가입 처리 or 그냥 필요 시 사용
 
