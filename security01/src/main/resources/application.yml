@@ -22,7 +22,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: update #create update none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+  security:
+    oauth2:
+      client:
+        registration: # facebook, google oauth2 로그인은 스프링이 지원한다.
+          google:
+            client-id: 844524611459-4lplfhjsbv8tg6f2legoqrklmjrdt5ah.apps.googleusercontent.com
+            client-secret: GbVCY6GIK8xdPTOzEXLH0JFS
+            scope:
+              - email
+              - profile

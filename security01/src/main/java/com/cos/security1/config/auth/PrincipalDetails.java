@@ -46,7 +46,7 @@ public class PrincipalDetails implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
+	} // 최종 로그인일 같은걸 비교해서 활성화 여부를 정해줄 수 있다.
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
