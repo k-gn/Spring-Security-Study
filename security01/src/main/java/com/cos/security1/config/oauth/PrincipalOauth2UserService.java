@@ -15,6 +15,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
@@ -50,6 +52,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
         }else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
             System.out.println("네이버 로그인 요청~~");
+            oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         } else {
             System.out.println("우리는 네이버, 구글, 페이스북만 지원해요 ㅎㅎ");
         }
@@ -66,6 +69,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         User userEntity = userRepository.findByUsername(username);
         System.out.println("userEntity : " + userEntity);
         if(userEntity == null) {
+            System.out.println("OAuth 최초 로그인 : 회원가입 처리");
             userEntity = User.builder()
                     .username(username)
                     .password(password)
@@ -78,6 +82,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userRepository.save(userEntity);
         }
 
+        System.out.println("OAuth 로그인 성공!");
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
     }
 
