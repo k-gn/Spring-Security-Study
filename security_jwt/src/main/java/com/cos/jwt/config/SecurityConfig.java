@@ -1,6 +1,7 @@
 package com.cos.jwt.config;
 
 import com.cos.jwt.config.jwt.JwtAuthenticationFilter;
+import com.cos.jwt.config.jwt.JwtAuthorizationFilter;
 import com.cos.jwt.filter.MyFilter3;
 import com.cos.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 // 커스텀 필트는 그냥 addFilter로 시큐리티에서 등록할 수 없고 addFilterBefore나 addFilterAfter 를 사용해야 에러가 안난다.
-                .addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class)// 시큐리티 필터가 우선으로 실행
+//                .addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class)// 시큐리티 필터가 우선으로 실행
                 // jwt 사용을 위한 시큐리티 설정
                 .addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록(인증 O) - 모든 요청 허용
                 .csrf().disable() // CSRF 비활성화
@@ -40,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() // formlogin 비활성화 (안쓸거라)
                 .httpBasic().disable() // 기본설정 사용안함
                 .addFilter(new JwtAuthenticationFilter(authenticationManager())) // Authentication Manager가 필요
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 // 외부에서 자바스크립트로 요청 및 쿠키 전송을 하려고 할 때 기본적으로 서버에서 요청을 거부한다.
                 // 그리고 쿠키 방식을 쓰면 서버가 많아질 수록 관리하기가 힘들다.
                 // 그래서 basic 방식으로 헤더에 authorization에 인증정보를 같이 보내는데 암호화가 안되있어서 노출될 위험성이 있다.

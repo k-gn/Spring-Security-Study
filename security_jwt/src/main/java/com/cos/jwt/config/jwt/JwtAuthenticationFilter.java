@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // authenticationManager 로 로그인을 시도하면 PrincipalDetailsService 가 호출된다.
         // 이 후 PrincipalDetails를 세션에 담는다. (권한 관리를 위해서)
         // 마지막으로 JWT 토큰을 만들어 응답.
+
         // request에 있는 username과 password를 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
         LoginRequestDto loginRequestDto = null;
@@ -50,15 +51,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         loginRequestDto.getUsername(),
                         loginRequestDto.getPassword());
 
+        // 인증 처리
         Authentication authentication =
                 getAuthenticationManager().authenticate(authenticationToken);
-
+        
         PrincipalDetails principalDetailis = (PrincipalDetails) authentication.getPrincipal();
         System.out.println("Authentication : "+principalDetailis.getUser().getUsername());
 
+        // authentication 객체가 세션영역에 저장 => 로그인 성공
+        // 권한 관리를 시큐리티가 해준다.
         return authentication;
     }
 
+    // 인증이 정상적으로 되었으면 실행되는 함수
     // JWT Token 생성해서 response에 담아주기
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
@@ -67,12 +72,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetailis = (PrincipalDetails) authResult.getPrincipal();
 
         String jwtToken = JWT.create()
-                .withSubject(principalDetailis.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
+                .withSubject("cos") // 토큰 이름
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME)) // 만료시간(현재시간에 더하기)
                 .withClaim("id", principalDetailis.getUser().getId())
                 .withClaim("username", principalDetailis.getUser().getUsername())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET)); // Hash 암호방식의 secret key
 
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }
 }
