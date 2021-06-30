@@ -5,6 +5,7 @@ import com.cos.jwt.model.User;
 import com.cos.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,12 @@ public class RestApiController {
 
     // 유저 혹은 매니저 혹은 어드민이 접근 가능
     @GetMapping("user")
-    public String user(Authentication authentication) {
+    public String user(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("principal : "+principal.getUser().getId());
-        System.out.println("principal : "+principal.getUser().getUsername());
-        System.out.println("principal : "+principal.getUser().getPassword());
-
+        System.out.println("principal : " + principal.getUser().getId());
+        System.out.println("principal : " + principal.getUser().getUsername());
+        System.out.println("principal : " + principal.getUser().getPassword());
+        System.out.println("principalDetails : " + principalDetails);
         return "<h1>user</h1>";
     }
 
