@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.cos.jwt.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class PrincipalDetails implements UserDetails{
@@ -53,7 +54,8 @@ public class PrincipalDetails implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         user.getRoleList().forEach(r -> {
-            authorities.add(()->{ return r;});
+            authorities.add(new SimpleGrantedAuthority(r));
+//            authorities.add(()->{ return r;});
         });
         return authorities;
     }
