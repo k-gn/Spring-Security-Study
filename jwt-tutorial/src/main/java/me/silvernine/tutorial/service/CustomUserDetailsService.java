@@ -1,5 +1,6 @@
 package me.silvernine.tutorial.service;
 
+import lombok.RequiredArgsConstructor;
 import me.silvernine.tutorial.entity.User;
 import me.silvernine.tutorial.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,12 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component("userDetailsService")
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
-
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     // 로그인 시 사용자 정보를 DB에서 권한정보와 조회 후 처리한다.
     // 가져온 정보를 기반으로 UserDetails 객체를 생성해 리턴한다.

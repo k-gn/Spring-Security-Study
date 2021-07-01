@@ -1,5 +1,6 @@
 package me.silvernine.tutorial.service;
 
+import lombok.RequiredArgsConstructor;
 import me.silvernine.tutorial.dto.UserDto;
 import me.silvernine.tutorial.entity.Authority;
 import me.silvernine.tutorial.entity.User;
@@ -11,17 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
+    // 회원가입 수행
     @Transactional
     public User signup(UserDto userDto) {
         if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {
@@ -37,7 +36,7 @@ public class UserService {
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .nickname(userDto.getNickname())
-                .authorities(Collections.singleton(authority))
+                .authorities(Collections.singleton(authority)) // Set - Collections.singleton() : 단일 원소, 원소가 딱 1개일 경우에 사용
                 .activated(true)
                 .build();
 
@@ -49,8 +48,8 @@ public class UserService {
         return userRepository.findOneWithAuthoritiesByUsername(username);
     }
 
-//    @Transactional(readOnly = true)
-//    public Optional<User> getMyUserWithAuthorities() {
-//        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-//    }
+    @Transactional(readOnly = true)
+    public Optional<User> getMyUserWithAuthorities() {
+        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+    }
 }
