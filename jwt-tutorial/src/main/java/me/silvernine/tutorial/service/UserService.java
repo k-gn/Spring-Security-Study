@@ -43,11 +43,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // 특정 username 으로 조회
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities(String username) {
         return userRepository.findOneWithAuthoritiesByUsername(username);
     }
 
+    // Security Context 에 저장된 username 으로 조회 (= 내 정보 조회)
     @Transactional(readOnly = true)
     public Optional<User> getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
