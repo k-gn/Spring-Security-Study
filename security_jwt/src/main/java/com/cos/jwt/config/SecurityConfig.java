@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 커스텀 필트는 그냥 addFilter로 시큐리티에서 등록할 수 없고 addFilterBefore나 addFilterAfter 를 사용해야 에러가 안난다.
 //                .addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class)// 시큐리티 필터가 우선으로 실행
                 // jwt 사용을 위한 시큐리티 설정
-                .addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록(인증 O) - 모든 요청 허용
+                .addFilter(corsFilter) // @CrossOrigin(인증이 필요없는 요청일 경우), 시큐리티 필터에 등록(인증 필요할 경우) - 모든 요청 허용
                 .csrf().disable() // CSRF 비활성화
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않겠다.
                 .and()

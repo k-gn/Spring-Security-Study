@@ -40,6 +40,7 @@ spring:
 
           # oauth2 client 에서 스프링이 Provider로 제공하지 않는 oauth2 로그인은 직접 등록해준다.
           naver:
+
             client-id: njdfqedMjbI2vZCp6UW3
             client-secret: nvuVJIuiD3
             scope:
