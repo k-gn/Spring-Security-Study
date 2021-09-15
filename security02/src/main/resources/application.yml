@@ -1,0 +1,17 @@
+# logging 레벨 설정
+logging:
+  level:
+    root: INFO
+    sql: ERROR
+# 브라우저에 따라서 PUT, PATCH, DELETE 방식을 지원하지 않는 경우가 발생할 수 있다.
+# Overloaded POST 사용
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+# session
+server:
+  servlet:
+    session:
+      timeout: 10m # 기본이 30분이고 최소는 1분입니다.
