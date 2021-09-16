@@ -39,7 +39,7 @@ class NoteControllerTest {
     public void setUp(@Autowired WebApplicationContext applicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
                 .apply(springSecurity())
-                .alwaysDo(print())
+//                .alwaysDo(print())
                 .build();
         user = userRepository.save(new User("user123", "user", "ROLE_USER"));
         admin = userRepository.save(new User("admin123", "admin", "ROLE_ADMIN"));
@@ -58,14 +58,13 @@ class NoteControllerTest {
     @WithUserDetails(
             value = "user123", // userDetailsService를 통해 가져올 수 있는 유저
             userDetailsServiceBeanName = "userDetailsService", // UserDetailsService 구현체의 Bean
-            setupBefore = TestExecutionEvent.TEST_EXECUTION // 테스트 실행 직전에 유저를 가져온다.
+            setupBefore = TestExecutionEvent.TEST_EXECUTION // 테스트 실행 직전에 유저를 가져온다. (TEST_METHOD 는 미리 만들어 놓음)
     )
     void getNote_인증있음() throws Exception {
         mockMvc.perform(
                         get("/note")
                 ).andExpect(status().isOk())
-                .andExpect(view().name("note/index"))
-                .andDo(print());
+                .andExpect(view().name("note/index"));
     }
 
     @Test

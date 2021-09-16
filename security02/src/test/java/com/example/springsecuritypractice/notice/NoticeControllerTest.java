@@ -26,7 +26,7 @@ class NoticeControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp(@Autowired WebApplicationContext applicationContext) {
+    public void setUp(@Autowired WebApplicationContext applicationContext) { // 빈으로 등록되있어서 가져올 수 있음
         this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .alwaysDo(print())
@@ -36,8 +36,8 @@ class NoticeControllerTest {
     @Test
     void getNotice_인증없음() throws Exception {
         mockMvc.perform(get("/notice"))
-                .andExpect(redirectedUrlPattern("**/login"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(redirectedUrlPattern("**/login")) // 리다이랙트 url 검증
+                .andExpect(status().is3xxRedirection());  // 리다이랙트 상태값 검증
     }
 
     // @WithMockUser : 특정 사용자가 존재하는 것처럼 테스트를 진행할 수 있다.
@@ -46,7 +46,7 @@ class NoticeControllerTest {
     void getNotice_인증있음() throws Exception {
         mockMvc.perform(get("/notice"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("notice/index"));
+                .andExpect(view().name("notice/index")); // 뷰 이름 검증
     }
 
     @Test
@@ -60,6 +60,7 @@ class NoticeControllerTest {
     }
 
     @Test
+    // 시큐리티 패키지에 있는 User 타입 객체를 만듬, 커스텀 User 랑 타입 형변환 문제가 생길 수도 있다.
     @WithMockUser(roles = {"USER"}, username = "admin", password = "admin")
     void postNotice_유저인증있음() throws Exception {
         mockMvc.perform(

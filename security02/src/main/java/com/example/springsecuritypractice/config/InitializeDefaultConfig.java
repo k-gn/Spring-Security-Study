@@ -26,6 +26,7 @@ public class InitializeDefaultConfig {
      */
     @Bean
     public void initializeDefaultUser() {
+        System.out.println("initializeDefaultUser");
         User user = userService.signup("user", "user");
         noteService.saveNote(user, "테스트", "테스트입니다.");
         noteService.saveNote(user, "테스트2", "테스트2입니다.");
