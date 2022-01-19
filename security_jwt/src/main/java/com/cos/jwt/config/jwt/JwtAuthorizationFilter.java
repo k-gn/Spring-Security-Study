@@ -19,7 +19,7 @@ import java.io.IOException;
 
 // JWT 토큰이 유효한지 판단하는 필터
 // 시큐리티가 가지고 있는 필터 중 BasicAuthenticationFilter 라는 것이 있다.
-// 이 필터는  권한이나 인증이 필요한 특정 주소를 요청 시 동작한다.
+// 이 필터는 권한이나 인증이 필요한 특정 주소를 요청 시 동작한다.
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UserRepository userRepository;
@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 .replace(JwtProperties.TOKEN_PREFIX, "");
 
         // 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
-        // 내가 SecurityContext에 집적접근해서 세션을 만들때 자동으로 UserDetailsService에 있는 loadByUsername이 호출됨.
+        // 내가 SecurityContext에 직접접근해서 세션을 만들때 자동으로 UserDetailsService에 있는 loadByUsername이 호출됨.
         // jwt 토큰을 검증
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token) // 서명이 정상적이면 username을 가져오는 코드
                 .getClaim("username").asString();

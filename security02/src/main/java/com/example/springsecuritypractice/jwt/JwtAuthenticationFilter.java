@@ -56,6 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException {
         User user = (User) authResult.getPrincipal();
         String token = JwtUtils.createToken(user);
+        System.out.println(token);
         // 쿠키 생성
         Cookie cookie = new Cookie(JwtProperties.COOKIE_NAME, token);
         cookie.setMaxAge(JwtProperties.EXPIRATION_TIME); // 쿠키의 만료시간 설정
